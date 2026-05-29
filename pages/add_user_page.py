@@ -7,12 +7,15 @@ class AddUserPage:
     DROPDOWN_INPUT_SELECTOR = ".oxd-select-text-input"
     DROPDOWN_PANEL_SELECTOR = ".oxd-select-dropdown"
     INPUT_GROUP = ".oxd-input-group"
+    AUTOCOMPLETE_OPTION = ".oxd-autocomplete-option"
 
     ADD_USER_TITLE_TEXT = "Add User"
     CANCEL_BUTTON_TEXT = "Cancel"
     USERNAME_LABEL = "Username"
     PASSWORD_LABEL = "Password"
+    CONFIRM_PASSWORD_LABEL = "Confirm password"
     EMPLOYEE_NAME_PLACEHOLDER = "Type for hints..."
+    SAVE_BUTTON_TEXT = "Save"
 
     def __init__(self, page):
         self.page = page
@@ -25,6 +28,10 @@ class AddUserPage:
         self.password_input = page.locator(self.INPUT_GROUP).filter(
             has_text=self.PASSWORD_LABEL
         ).locator("input").first
+        self.confirm_password_input = page.locator(self.INPUT_GROUP).filter(
+            has_text=self.CONFIRM_PASSWORD_LABEL
+        ).locator("input")
+        self.save_button = page.get_by_role("button", name=self.SAVE_BUTTON_TEXT)
 
         self.user_role_dropdown = page.locator(self.DROPDOWN_SELECTOR).nth(0)
         self.status_dropdown = page.locator(self.DROPDOWN_SELECTOR).nth(1)
@@ -70,11 +77,23 @@ class AddUserPage:
     def select_status(self, status):
         self._select_option(self.status_dropdown, status)
 
-    def enter_employee_name(self, employee_name):
+    def select_employee_name(self, employee_name):
         self.employee_name_input.fill(employee_name)
+
+        option = self.page.locator(self.AUTOCOMPLETE_OPTION).filter(
+            has_text=employee_name
+        )
+
+        option.click()
 
     def enter_username(self, username):
         self.username_input.fill(username)
 
     def enter_password(self, password):
         self.password_input.fill(password)
+
+    def confirm_password(self, password):
+        self.confirm_password_input.fill(password)
+
+    def click_save_button(self):
+        self.save_button.click()

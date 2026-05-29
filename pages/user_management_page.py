@@ -18,5 +18,7 @@ class UserManagementPage:
         self.add_button.click()
 
     def expect_system_users_displayed(self):
-        expect(self.system_users_title).to_have_text(self.SYSTEM_USERS_TITLE_TEXT)
+        expect(self.system_users_title).to_have_text(self.SYSTEM_USERS_TITLE_TEXT, timeout=30000)
+
+
 

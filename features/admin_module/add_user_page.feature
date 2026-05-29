@@ -10,12 +10,13 @@ Feature: Adding User
     And I enter employee name as <employee_name>
     And I enter username <username>
     And I enter password <password>
-    And I confirm <password>
+    And I confirm password <password>
     And I save the data
+    Then I should see the System Users page
 
     Examples:
       | user_role | status  | employee_name | username | password   |  |
-      | ESS       | Enabled | Trinh Le      | trinh_le | Trinhle123 |  |
+      | ESS       | Enabled | Brenden akhill QA | trinh_le | Trinhle123 |  |
 
   Scenario: Cancel adding user
     Given I am on the dashboard page

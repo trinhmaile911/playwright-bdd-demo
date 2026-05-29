@@ -1,17 +1,16 @@
 import pytest
-from playwright.sync_api import sync_playwright, expect
 from config.settings import BASE_URL, ADMIN_USERNAME, ADMIN_PASSWORD, HEADLESS
 
 from pages.dashboard_page import DashboardPage
 from pages.user_management_page import UserManagementPage
 from pages.add_user_page import AddUserPage
+from utils.APIUtils import APIUtils
 
 @pytest.fixture(scope='session')
-def browser():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=HEADLESS)
-        yield browser
-        browser.close()
+def browser(playwright):
+    browser = playwright.chromium.launch(headless=HEADLESS)
+    yield browser
+    browser.close()
 
 @pytest.fixture(scope='session')
 def auth_context(browser):
@@ -33,6 +32,38 @@ def page(auth_context):
 
     yield page
     page.close()
+
+@pytest.fixture
+def api_request_context(playwright, auth_context):
+    context = playwright.request.new_context(
+        base_url=BASE_URL,
+        storage_state=auth_context.storage_state(),
+        extra_http_headers={
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    )
+
+    yield context
+
+    context.dispose()
+
+@pytest.fixture
+def scenario_context():
+    return {}
+
+@pytest.fixture
+def created_system_users(api_utils):
+    user_ids = []
+
+    yield user_ids
+
+    if user_ids:
+        api_utils.delete_system_users(user_ids)
+
+@pytest.fixture
+def api_utils(api_request_context):
+    return APIUtils(api_request_context)
 
 @pytest.fixture
 def dashboard_page(page):
