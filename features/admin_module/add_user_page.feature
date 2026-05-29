@@ -16,7 +16,7 @@ Feature: Adding User
 
     Examples:
       | user_role | status  | employee_name | username | password   |  |
-      | ESS       | Enabled | Brenden akhill QA | trinh_le | Trinhle123 |  |
+      | ESS       | Enabled | Admin 1       | trinh_le | Trinhle123 |  |
 
   Scenario: Cancel adding user
     Given I am on the dashboard page
