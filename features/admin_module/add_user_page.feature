@@ -1,6 +1,5 @@
 Feature: Adding User
 
-  @smoke
   Scenario Outline: Successfully add a user
     Given I am on the dashboard page
     When I open the Admin module
