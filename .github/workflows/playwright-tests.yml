@@ -8,86 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Run Playwright BDD Tests
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: ['3.11', '3.12', '3.13']
-      fail-fast: false
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install --with-deps chromium
-
-      - name: Install Allure CLI
-        run: |
-          sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
-          sudo tar -zxvf allure-2.24.0.tgz -C /opt/
-          sudo ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure
-          allure --version
-
-      - name: Create .env file
-        run: |
-          echo "BASE_URL=${{ secrets.BASE_URL || 'https://opensource-demo.orangehrmlive.com' }}" >> .env
-          echo "ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME || 'Admin' }}" >> .env
-          echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD || 'admin123' }}" >> .env
-          echo "HEADLESS=true" >> .env
-
-      - name: Run BDD tests
-        run: |
-          pytest steps/test_admin_module.py -v --html=report.html --self-contained-html --alluredir=allure-results
-
-      - name: Generate Allure Report
-        if: always()
-        run: |
-          allure generate allure-results --clean -o allure-report
-
-      - name: Upload HTML Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-report-py${{ matrix.python-version }}
-          path: report.html
-          retention-days: 30
-
-      - name: Upload Allure Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report-py${{ matrix.python-version }}
-          path: allure-report/
-          retention-days: 30
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-py${{ matrix.python-version }}
-          path: test-results/
-          retention-days: 7
-
-      - name: Upload screenshots on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots-py${{ matrix.python-version }}
-          path: test-results/**/*.png
-          retention-days: 7
-
   test-smoke:
     name: Smoke Tests Only
     runs-on: ubuntu-latest
@@ -124,7 +44,7 @@ jobs:
 
       - name: Run smoke tests
         run: |
-          pytest steps/test_admin_module.py -m smoke -v --html=smoke-report.html --self-contained-html --alluredir=allure-results
+          pytest steps/ -m smoke -v --html=smoke-report.html --self-contained-html --alluredir=allure-results
 
       - name: Generate Allure Report
         if: always()
