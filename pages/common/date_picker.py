@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from utils.date_helper import MONTH_NAMES
 
@@ -23,7 +24,7 @@ class DatePicker:
         self.dropdown_option.filter(has_text=year).click()
 
     def click_day(self, day: str):
-        self.calendar_date.filter(has_text=day).click()
+        self.calendar_date.filter(has_text=re.compile(f"^{day}$")).click()
 
     def select_date(self, target: datetime):
         self.select_month(MONTH_NAMES[target.month - 1])

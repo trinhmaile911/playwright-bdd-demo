@@ -1,4 +1,5 @@
 
+import allure
 import pytest
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -45,8 +46,9 @@ def auth_context(browser, authenticate):
     context.close()
 
 @pytest.fixture
-def page(auth_context):
+def page(auth_context, request):
     page = auth_context.new_page()
+    request.node._playwright_page = page
     yield page
     page.close()
 
@@ -94,3 +96,21 @@ def add_user_page(page):
 @pytest.fixture
 def assign_leave_page(page):
     return AssignLeavePage(page)
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when == "call" and report.failed:
+        page = getattr(item, "_playwright_page", None)
+
+        if page:
+            try:
+                allure.attach(
+                    page.screenshot(full_page=True),
+                    name="Failure Screenshot",
+                    attachment_type=allure.attachment_type.PNG,
+                )
+            except Exception as e:
+                print(f"Failed to attach screenshot: {e}")
