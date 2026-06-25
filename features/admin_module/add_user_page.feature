@@ -14,8 +14,8 @@ Feature: Adding User
     Then I should see the System Users page
 
     Examples:
-      | user_role | status  | employee_name | username | password   |  |
-      | ESS       | Enabled | Admin 1       | trinh_le | Trinhle123 |  |
+      | user_role | status  | employee_name | username  | password   |
+      | ESS       | Enabled | Admin 1       | test_user | Trinhle123 |
 
   Scenario: Cancel adding user
     Given I am on the dashboard page
