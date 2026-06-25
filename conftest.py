@@ -1,4 +1,5 @@
 
+import allure
 import pytest
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -94,3 +95,19 @@ def add_user_page(page):
 @pytest.fixture
 def assign_leave_page(page):
     return AssignLeavePage(page)
+
+@pytest.hookimpl(hookwrapper_=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when == 'call' and report.failed:
+        page = item.funcargs.get("page")
+
+        if page:
+            try:
+                allure.attach(page.screenshot(full_page=True),
+                name="Failure Screenshot",
+                attachment_type=allure.attachment_type.PNG)
+            except Exception:
+                pass
