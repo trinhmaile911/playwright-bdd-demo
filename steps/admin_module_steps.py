@@ -1,3 +1,4 @@
+import time
 from pytest_bdd import given, when, then, parsers
 
 @given("I am on the dashboard page")
@@ -30,8 +31,9 @@ def select_employee_name(add_user_page, employee_name):
 
 @when(parsers.parse("I enter username {username}"))
 def enter_username(add_user_page, scenario_context, username):
-    add_user_page.enter_username(username)
-    scenario_context["username"] = username
+    unique_username = f"{username}_{int(time.time())}"
+    add_user_page.enter_username(unique_username)
+    scenario_context["username"] = unique_username
 
 @when(parsers.parse("I enter password {password}"))
 def enter_password(add_user_page, password):
