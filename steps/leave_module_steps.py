@@ -1,4 +1,5 @@
 from pytest_bdd import given, when, then, parsers
+from steps.common_steps import *
 import time
 @given("I am on the assign leave page")
 def open_assign_leave_page(assign_leave_page):
@@ -40,7 +41,3 @@ def click_confirm_button(assign_leave_page):
 def assert_confirm_dialog(assign_leave_page):
     assign_leave_page.click_submit_button()
     assign_leave_page.assert_confirm_dialog()
-
-@then("I should see a toast message")
-def assert_toast_message(assign_leave_page):
-    assign_leave_page.assert_toast_message()

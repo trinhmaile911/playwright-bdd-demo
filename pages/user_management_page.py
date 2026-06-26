@@ -1,7 +1,8 @@
+from pages.base_page import BasePage
 from playwright.sync_api import expect
 
 
-class UserManagementPage:
+class UserManagementPage(BasePage):
     SYSTEM_USERS_TITLE = ".oxd-table-filter-title"
 
     ADMIN_TEXT = "Admin"
@@ -9,8 +10,7 @@ class UserManagementPage:
     SYSTEM_USERS_TITLE_TEXT = "System Users"
 
     def __init__(self, page):
-        self.page = page
-
+        super().__init__(page)
         self.add_button = page.get_by_role("button", name=self.ADD_BUTTON_TEXT)
         self.system_users_title = page.locator(self.SYSTEM_USERS_TITLE)
 

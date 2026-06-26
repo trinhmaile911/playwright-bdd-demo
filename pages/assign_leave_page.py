@@ -1,10 +1,11 @@
+from pages.base_page import BasePage
 from pages.common.date_picker import DatePicker
 from utils.date_helper import get_future_date
 from playwright.sync_api import expect
 from re import compile
 import time
 
-class AssignLeavePage:
+class AssignLeavePage(BasePage):
     ASSIGN_LEAVE_URL = "/web/index.php/leave/assignLeave"
 
     DATE_ICON = ".oxd-date-input-icon"
@@ -18,7 +19,7 @@ class AssignLeavePage:
     TOAST_MESSAGE = ".oxd-toast"
 
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
         self.date_picker = DatePicker(self.page)
         self.from_date_input = self.page.locator(self.DATE_ICON).nth(0)
         self.to_date_input = self.page.locator(self.DATE_ICON).nth(1)
@@ -35,7 +36,7 @@ class AssignLeavePage:
         self.confirm_button = self.page.get_by_role("button", name=self.CONFIRM_BUTTON_NAME)
 
     def navigate_to_assign_leave(self):
-        self.page.goto(self.ASSIGN_LEAVE_URL)
+        self.navigate(self.ASSIGN_LEAVE_URL)
 
     def select_start_date(self, days):
         target = get_future_date(days)

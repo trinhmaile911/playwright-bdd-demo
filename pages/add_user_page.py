@@ -1,7 +1,8 @@
+from pages.base_page import BasePage
 from playwright.sync_api import expect
 
 
-class AddUserPage:
+class AddUserPage(BasePage):
     ADD_USER_TITLE_SELECTOR = ".orangehrm-main-title"
     DROPDOWN_SELECTOR = ".oxd-select-text"
     DROPDOWN_INPUT_SELECTOR = ".oxd-select-text-input"
@@ -18,7 +19,7 @@ class AddUserPage:
     SAVE_BUTTON_TEXT = "Save"
 
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
         self.cancel_button = page.get_by_role("button", name=self.CANCEL_BUTTON_TEXT)
         self.add_user_title = page.locator(self.ADD_USER_TITLE_SELECTOR)
         self.employee_name_input = page.get_by_placeholder(self.EMPLOYEE_NAME_PLACEHOLDER)
