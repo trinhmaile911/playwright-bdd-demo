@@ -4,7 +4,8 @@
     "middle_name": "Michael",
     "last_name": "Doe",
     "license_expiry_date": "2025-06-26",
-    "gender": "Female"
+    "gender": "Female",
+    "attachment_file_path": "test_data/files/sample.pdf"
   },
   "empty_first_name": {
     "first_name": "",

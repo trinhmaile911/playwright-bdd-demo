@@ -1,7 +1,7 @@
 from pytest_bdd import given, when, then
 from utils.date_helper import parse_date
+from steps.common_steps import *
 
-import time
 
 @given("I am on the personal details page")
 def open_personal_details_page(personal_details_page):
@@ -28,4 +28,16 @@ def select_license_expiry_date(personal_details_page, personal_details_data):
 def select_gender(personal_details_page, personal_details_data):
     gender = personal_details_data["valid_user"]["gender"]
     personal_details_page.select_gender(gender)
-    time.sleep(10)
+
+@when("I click Add button")
+def click_add_button(personal_details_page):
+    personal_details_page.click_add_button()
+
+@when("I add an attachment")
+def add_attachment(personal_details_page, personal_details_data):
+    file_path = personal_details_data["valid_user"]["attachment_file_path"]
+    personal_details_page.input_attachment(file_path)
+
+@when("I save the attachment uploaded")
+def save_attachment(personal_details_page):
+    personal_details_page.click_save_file_button()

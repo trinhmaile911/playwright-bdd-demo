@@ -34,7 +34,7 @@ def authenticate():
 
 @pytest.fixture(scope='session')
 def browser(playwright):
-    browser = playwright.chromium.launch(headless=HEADLESS)
+    browser = playwright.chromium.launch(headless=HEADLESS, args=["--start-maximized"])
     yield browser
     browser.close()
 
@@ -43,6 +43,7 @@ def auth_context(browser, authenticate):
     context = browser.new_context(
         base_url=BASE_URL,
         storage_state=AUTH_FILE,
+        no_viewport=True,
     )
     yield context
     context.close()
