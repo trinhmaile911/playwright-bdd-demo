@@ -8,3 +8,6 @@ MONTH_NAMES = [
 
 def get_future_date(days) -> datetime:
     return datetime.today() + timedelta(days=int(days))
+
+def parse_date(date_str: str, fmt: str = "%Y-%m-%d") -> datetime:
+    return datetime.strptime(date_str, fmt)

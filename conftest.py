@@ -7,9 +7,11 @@ from config.settings import BASE_URL, ADMIN_USERNAME, ADMIN_PASSWORD, HEADLESS
 from pages.assign_leave_page import AssignLeavePage
 
 from pages.dashboard_page import DashboardPage
+from pages.personal_details_page import PersonalDetailsPage
 from pages.user_management_page import UserManagementPage
 from pages.add_user_page import AddUserPage
-from utils.APIUtils import APIUtils
+from utils.api_utils import APIUtils
+from utils.json_helper import load_test_data
 
 AUTH_FILE = Path("tests/.auth/admin.json")
 
@@ -96,6 +98,14 @@ def add_user_page(page):
 @pytest.fixture
 def assign_leave_page(page):
     return AssignLeavePage(page)
+
+@pytest.fixture
+def personal_details_page(page):
+    return PersonalDetailsPage(page)
+
+@pytest.fixture
+def personal_details_data():
+    return load_test_data("personal_details.json")
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
